@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import CharacterCard from './CharacterCard';
-import { Provider } from 'react-redux';
-import store from './store';
+import { connect } from 'react-redux';
+import * as actions from './reducer';
 
+@connect(
+  state => ({
+    actors: state.actors,
+  }),
+  { createActor: actions.createActor }
+)
 class App extends Component {
   render() {
+    const { actors, createActor } = this.props;
+
     return (
-      <Provider store={store}>
-        <div className="App">
-          <CharacterCard />
-        </div>
-      </Provider>
+      <div className="App">
+        {actors.map(actor => <CharacterCard key={actor.id} actor={actor} />)}
+        <div onClick={createActor}>Add actor</div>
+      </div>
     );
   }
 }

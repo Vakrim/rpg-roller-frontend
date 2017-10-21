@@ -1,44 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
 import Field from './Field';
+import { connect } from 'react-redux';
+import * as actions from './reducer';
 
+@connect(null, { updateActor: actions.updateActor })
 export default class CharacterCard extends React.PureComponent {
-  state = {
-    name: '',
-    wounds: 5,
-    weaponSkill: 30,
-    ballisticSkill: 30,
-    strength: 30,
-    toughness: 30,
-    agility: 30,
-    intelligence: 30,
-    perception: 30,
-    willPower: 30,
-    fellowship: 30,
-    influence: 30,
-  };
-
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+    const { updateActor, actor: { id } } = this.props;
+    updateActor(id, e.target.name, e.target.value);
   };
 
   render() {
     const {
-      name,
-      wounds,
-      weaponSkill,
-      ballisticSkill,
-      strength,
-      toughness,
-      agility,
-      intelligence,
-      perception,
-      willPower,
-      fellowship,
-      influence,
-    } = this.state;
+      actor: {
+        name,
+        wounds,
+        weaponSkill,
+        ballisticSkill,
+        strength,
+        toughness,
+        agility,
+        intelligence,
+        perception,
+        willPower,
+        fellowship,
+        influence,
+      },
+    } = this.props;
 
     return (
       <CardWrapper>

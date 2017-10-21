@@ -19,4 +19,7 @@ const Label = styled.label`
   flex: 100px;
   margin-right: 5px;
 `;
-const Input = styled.input`width:100%; flex: 100px;`;
+const Input = styled.input`
+  width: 100%;
+  flex: 100px;
+`;
