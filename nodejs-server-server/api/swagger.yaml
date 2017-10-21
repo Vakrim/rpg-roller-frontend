@@ -1,0 +1,280 @@
+---
+swagger: "2.0"
+info:
+  description: ""
+  version: ""
+  title: ""
+  termsOfService: ""
+host: "localhost:8080"
+basePath: "/"
+tags:
+- name: "combat"
+- name: "actors"
+schemes:
+- "http"
+paths:
+  /combat:
+    post:
+      tags:
+      - "combat"
+      summary: "Create new combat"
+      description: ""
+      operationId: "addCombat"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "combat"
+        description: "combat parameters"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateCombatParameters"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CombatPresenter"
+      x-swagger-router-controller: "Combat"
+  /combat/{combatId}/add-actors:
+    patch:
+      tags:
+      - "combat"
+      summary: "Add actors to combat"
+      description: ""
+      operationId: "addActorsToCombat"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "actorIds"
+        description: "list of actor ids to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/AddActorsToCombatParameters"
+      - name: "combatId"
+        in: "path"
+        description: "combat id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CombatPresenter"
+      x-swagger-router-controller: "Combat"
+  /combat/{combatId}/remove-actors:
+    patch:
+      tags:
+      - "combat"
+      summary: "Remove actors from combat"
+      description: ""
+      operationId: "removeActorsFromCombat"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "combat"
+        description: "list of actor ids to be removed"
+        required: true
+        schema:
+          $ref: "#/definitions/RemoveActorsFromCombatParameters"
+      - name: "combatId"
+        in: "path"
+        description: "combat id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CombatPresenter"
+      x-swagger-router-controller: "Combat"
+  /actors:
+    get:
+      tags:
+      - "actors"
+      summary: "Get list of possible  comat actors"
+      description: ""
+      operationId: "getActorList"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CombatActorPresenter"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Actors"
+    post:
+      tags:
+      - "actors"
+      summary: "Add actor"
+      description: ""
+      operationId: "addActor"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "actor"
+        description: "actor to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/CombatActorPresenter"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CombatActorPresenter"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Actors"
+  /actors/{id}:
+    get:
+      tags:
+      - "actors"
+      summary: "Get one specific actor"
+      description: ""
+      operationId: "showActor"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "actor id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CombatActorPresenter"
+        404:
+          description: "actor with given id is not found"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Actors"
+securityDefinitions: {}
+definitions:
+  CombatActorPresenter:
+    type: "object"
+    required:
+    - "hp"
+    - "id"
+    - "name"
+    - "statistics"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      hp:
+        type: "integer"
+        format: "int32"
+      statistics:
+        $ref: "#/definitions/Statistics"
+  CombatPresenter:
+    type: "object"
+    required:
+    - "actors"
+    - "id"
+    properties:
+      id:
+        type: "string"
+      actors:
+        type: "array"
+        items:
+          $ref: "#/definitions/InCombatActorPresenter"
+  InCombatActorPresenter:
+    type: "object"
+    required:
+    - "actor"
+    - "currentHealth"
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      currentHealth:
+        type: "integer"
+        format: "int32"
+      initiaive:
+        type: "number"
+      actor:
+        $ref: "#/definitions/CombatActorPresenter"
+  Statistics:
+    type: "object"
+    required:
+    - "agility"
+    - "ballisticSkill"
+    - "fellowship"
+    - "influence"
+    - "intelligence"
+    - "perception"
+    - "strength"
+    - "toughness"
+    - "weaponSkill"
+    - "willPower"
+    properties:
+      weaponSkill:
+        type: "integer"
+        format: "int32"
+      ballisticSkill:
+        type: "integer"
+        format: "int32"
+      strength:
+        type: "integer"
+        format: "int32"
+      toughness:
+        type: "integer"
+        format: "int32"
+      agility:
+        type: "integer"
+        format: "int32"
+      intelligence:
+        type: "integer"
+        format: "int32"
+      perception:
+        type: "integer"
+        format: "int32"
+      willPower:
+        type: "integer"
+        format: "int32"
+      fellowship:
+        type: "integer"
+        format: "int32"
+      influence:
+        type: "integer"
+        format: "int32"
+  CreateCombatParameters:
+    type: "object"
+    required:
+    - "actorIds"
+    properties:
+      actorIds:
+        type: "array"
+        items:
+          type: "string"
+  AddActorsToCombatParameters:
+    type: "object"
+    required:
+    - "actorIds"
+    properties:
+      actorIds:
+        type: "array"
+        items:
+          type: "string"
+  RemoveActorsFromCombatParameters:
+    type: "object"
+    required:
+    - "actorIds"
+    properties:
+      actorIds:
+        type: "array"
+        items:
+          type: "string"
